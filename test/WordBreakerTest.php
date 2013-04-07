@@ -14,5 +14,10 @@ class WordBreakerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(["กกต", "ขจ"], $this->wordBreaker->breakIntoWords("กกตขจ"));	
 	}
 	
+	public function testUnk() 
+	{
+		$this->assertEquals(["กกต", "ศรรม", "ขจ"], $this->wordBreaker->breakIntoWords("กกตศรรมขจ"));	
+	}
+	
 }
 ?>
