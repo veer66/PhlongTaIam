@@ -11,26 +11,89 @@ class WordDagBuilder
 		$this->dict = $dict;		
 	}
 	
-	public function build($string, $len) 
-	{
-		$dag = [];
+	public static function cmp($a, $b) {
+		$r = 0;
+		if($a[0] == $b[0]) {
+			if($a[1] == $b[1]) {
+				$r = ($a[2] < $b[2]) ? -1 : 1;
+			} else {
+				$r = ($a[1] < $b[1]) ? -1 : 1;
+			}
+		} else {
+			$r = ($a[0] < $b[0]) ? -1 : 1;
+		}
+		return $r;
+	}
+	
+	public function build($string, $len)  {
+		$dag = [];	
+		$this->buildByDict($dag, $string, $len);
+		$this->buildByLatinRule($dag, $string, $len);
+		uasort($dag, 'PhlongTaIam\WordDagBuilder::cmp');
+		return $dag;
+	}
+
+	private function charAt($string, $i) {
+		return mb_substr($string, $i, 1, "UTF-8");
+	}
+
+	private function buildByLatinRule(&$dag, $string, $len) {
+		mb_internal_encoding("UTF-8");
+		mb_regex_encoding("UTF-8");
+		
+		$next_latin = 0;
+		for($i = 0; $i < $len; $i++) {
+			$space_e = null;
+			$latin_e = null;
+			$space_break = false;
+			$latin_break = false;
+			for($j = $i; $j < $len; $j++) {
+				if($space_break && $latin_break)
+					break;			
+				$ch = $this->charAt($string, $j);
+				if(!$space_break) {
+					if($ch === " ") {
+						$space_e = $j + 1;
+					} else {
+						$space_break = true;
+					} 
+				}
+				if(!$latin_break && $j >= $next_latin) {
+					if(mb_ereg_match("[A-Za-z]", $ch)) {				
+						$latin_e = $j + 1;
+					} else {
+						$latin_break = true;
+					}
+				}
+			}
+									
+			if($space_e !== null) {
+				$dag[] = [$i, $space_e, SPACE];
+			}
+			if($latin_e !== null) {
+				$dag[] = [$i, $latin_e, LATIN];
+				$next_latin = $latin_e;
+			} 
+		}
+	}
+	
+	private function buildByDict(&$dag, $string, $len) 
+	{	
 		for($i = 0; $i < $len; $i++) {
 			$iter = new DictIter($this->dict);
 			for($j = $i; $j < $len; $j++) {
-				$ch = mb_substr($string, $j, 1, "UTF-8");
+				$ch = $this->charAt($string, $j);
 				
 				$status = $iter->walk($ch);				
-				// echo "CH = $ch\tstatus=$status\n";
+
 				if($status == INVALID) {
 					break;
 				} else if($status == ACTIVE_BOUNDARY) {
-					$dag[] = [$i, $j+1];
+					$dag[] = [$i, $j+1, DICT];
 				}
 				
 			}
-		}
-		// print_r($dag);
-		return $dag;
+		}	
 	}
 }
 ?>
