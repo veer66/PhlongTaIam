@@ -1,5 +1,7 @@
 <?php
 
+namespace PhlongTaIam;
+
 define("FIRST", 1);
 define("LAST", 2);
 
@@ -28,20 +30,24 @@ class Dict
 	
 	public function findIndexOfNeedle($posType, $prefix, $offset = null, $s = null, $e = null) 
 	{
-		if($offset == null) $offset = 0;
-		if($s == null) $s = 0;
-		if($e == null) $e = count($this->strList);
+		
+		if($offset === null) $offset = 0;
+		if($s === null) $s = 0;
+		if($e === null) $e = count($this->strList);
 		$l = $s;
 		$r = $e - 1;
 		$ans = null;		
 		
-		while($l < $r) {			
+		while($l <= $r) {			
 			$m = floor(($l + $r) / 2);
-			if($prefix[0] > $this->strList[$m][$offset]) {
+			// echo "$l $r $m\n";
+			$ch = mb_substr($this->strList[$m], $offset, 1, "UTF-8");
+			if($prefix > $ch) {
 				$l = $m + 1;
-			} else if($prefix[0] < $this->strList[$m][$offset]) {
+			} else if($prefix < $ch) {
 				$r = $m - 1;
 			} else {
+				// echo "MATCH\n";
 				$ans = $m;
 				if($posType == FIRST) 
 					$r = $m - 1;
@@ -49,7 +55,16 @@ class Dict
 					$l = $m + 1;
 			}
 		}
-		return $ans == null ? null : intval($ans);
+		return $ans === null ? null : intval($ans);
+	}
+	
+	public function getDictSize() 
+	{
+		return count($this->strList);
+	}
+	
+	public function getStringLength($i) {
+		return mb_strlen($this->strList[$i], "UTF-8");
 	}
 }
 
