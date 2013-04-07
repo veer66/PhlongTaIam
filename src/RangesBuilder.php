@@ -53,7 +53,7 @@ class RangesBuilder
 			if($path[$i] !== null) {
 				$left_boundary = $i;
 			}
-		}
+		}	
 		if($path[$len] === null) {
 			$path[$len] = [$left_boundary, $path[$left_boundary][WEIGHT] + 1];
 		}
