@@ -18,11 +18,22 @@ class RangesBuilder
 		return $eIndex;
 	}
 	
+	private function buildSIndex($dag) {
+		$eIndex = [];
+		foreach($dag as $range) {
+			if(!array_key_exists($range[S], $eIndex))
+				$eIndex[$range[S]] = [];
+			$eIndex[$range[S]][] = $range[E];
+		}
+		return $eIndex;
+	}
+	
+	
 	private function comparePathInfo($info0, $info1) {
 		return $info0[UNK] < $info1 && $info0[WEIGHT] < $info1[WEIGHT];
 	}
 	
-	private function buildPath($len, $eIndex) {
+	private function buildPath($len, $sIndex, $eIndex) {
 		$path = array_fill(0, $len + 1, null);
 		$path[0] = [0, 0, 0];
 		$left_boundary = 0;
@@ -36,26 +47,18 @@ class RangesBuilder
 						}
 					}
 				}
-				
-				if($path[$i] === null) {
-					foreach($eIndex[$i] as $s) {
-						$info = [$s, $path[$left_boundary][WEIGHT] + 2, $path[$left_boundary][UNK] + 1];
-						if($path[$i] === null || $this->comparePathInfo($info, $path[i])) {
-							$path[$i] = $info;
-							$unk_info = [$left_boundary, 
-										 $path[$left_boundary][WEIGHT] + 1, 
-										 $path[$left_boundary][UNK] + 1];
-							$path[$s] = $unk_info;						
-						}						
-					}					
-				}
+				if($path[$i] !== null) {
+					$left_boundary = $i;
+				}				
 			}
-			if($path[$i] !== null) {
-				$left_boundary = $i;
-			}
+			if($path[$i] === null && array_key_exists($i, $sIndex)) {
+				$info = [$left_boundary, $path[$left_boundary][WEIGHT] + 1, $path[$left_boundary][UNK] + 1];
+				$path[$i] = $info;												
+			}							
 		}	
+						
 		if($path[$len] === null) {
-			$path[$len] = [$left_boundary, $path[$left_boundary][WEIGHT] + 1];
+			$path[$len] = [$left_boundary, $path[$left_boundary][WEIGHT] + 1, $path[$left_boundary][UNK] + 1];
 		}
 		return $path;
 	}
@@ -74,7 +77,8 @@ class RangesBuilder
 	
 	public function buildFromDag($dag, $len) {
 		$eIndex = $this->buildEIndex($dag);
-		$path = $this->buildPath($len, $eIndex);
+		$sIndex = $this->buildSIndex($dag);		
+		$path = $this->buildPath($len, $sIndex, $eIndex);
 		return $this->pathToRanges($path, $len);
 	}
 }
