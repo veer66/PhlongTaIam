@@ -35,6 +35,12 @@ class WordDagBuilderTest extends PHPUnit_Framework_TestCase
 		$dag = $this->builder->build("ขก pls", 6);
 		$this->assertEquals([[0,1, DICT], [1,2, DICT], [2,3,SPACE], [3,6, LATIN]], $dag);
 	}	
+
+	public function testLatinNum() 
+	{
+		$dag = $this->builder->build("123", 3);
+		$this->assertEquals([[0,3, LATIN]], $dag);
+	}	
 	
 }
 ?>

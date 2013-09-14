@@ -59,7 +59,7 @@ class WordDagBuilder
 					} 
 				}
 				if(!$latin_break && $j >= $next_latin) {
-					if(mb_ereg_match("[A-Za-z]", $ch)) {				
+					if(mb_ereg_match("[A-Za-z\d]", $ch)) {				
 						$latin_e = $j + 1;
 					} else {
 						$latin_break = true;
