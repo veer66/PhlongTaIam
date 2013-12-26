@@ -11,12 +11,12 @@ class WordBreakerTest extends PHPUnit_Framework_TestCase
 
 	public function testSimple() 
 	{
-		$this->assertEquals(["กกต", "ขจ"], $this->wordBreaker->breakIntoWords("กกตขจ"));	
+		$this->assertEquals(array("กกต", "ขจ"), $this->wordBreaker->breakIntoWords("กกตขจ"));	
 	}
 	
 	public function testUnk() 
 	{
-		$this->assertEquals(["กกต", "ศรรม", "ขจ"], $this->wordBreaker->breakIntoWords("กกตศรรมขจ"));	
+		$this->assertEquals(array("กกต", "ศรรม", "ขจ"), $this->wordBreaker->breakIntoWords("กกตศรรมขจ"));	
 	}
 	
 }

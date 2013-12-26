@@ -26,7 +26,7 @@ class WordDagBuilder
 	}
 	
 	public function build($string, $len)  {
-		$dag = [];	
+		$dag = array();	
 		$this->buildByDict($dag, $string, $len);
 		$this->buildByLatinRule($dag, $string, $len);
 		uasort($dag, 'PhlongTaIam\WordDagBuilder::cmp');
@@ -68,10 +68,10 @@ class WordDagBuilder
 			}
 									
 			if($space_e !== null) {
-				$dag[] = [$i, $space_e, SPACE];
+				$dag[] = array($i, $space_e, SPACE);
 			}
 			if($latin_e !== null) {
-				$dag[] = [$i, $latin_e, LATIN];
+				$dag[] = array($i, $latin_e, LATIN);
 				$next_latin = $latin_e;
 			} 
 		}
@@ -89,7 +89,7 @@ class WordDagBuilder
 				if($status == INVALID) {
 					break;
 				} else if($status == ACTIVE_BOUNDARY) {
-					$dag[] = [$i, $j+1, DICT];
+					$dag[] = array($i, $j+1, DICT);
 				}
 				
 			}

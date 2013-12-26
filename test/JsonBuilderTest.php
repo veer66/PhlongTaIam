@@ -10,7 +10,7 @@ class JsonBuilderTest extends PHPUnit_Framework_TestCase {
 	
 	public function testSimpleRange() {
 		$string = "ABC";
-		$ranges = [[0, 3, DICT]];
+		$ranges = array(array(0, 3, DICT));
 		$json = $this->builder->build($string, $ranges);
 		$this->assertContains("DICT", $json);
 		$this->assertContains("\"e\":3", $json);
