@@ -5,7 +5,7 @@ PHP Thai word breaker
 
 Requirement
 -----------
-* PHP 5.4+
+* PHP 5.3+
 
 Usage
 -----
