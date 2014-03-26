@@ -11,6 +11,7 @@ class WordBreaker
 {
     function __construct($dictPath) 
     {
+        mb_internal_encoding("UTF-8");
         $this->dict = new Dict();
         $this->dict->loadDict($dictPath);
         $this->acceptors = new Acceptors();
