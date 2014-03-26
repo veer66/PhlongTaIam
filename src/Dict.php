@@ -1,71 +1,103 @@
 <?php
-
 namespace PhlongTaIam;
-
-define("FIRST", 1);
-define("LAST", 2);
-
-class Dict
+class Dict 
 {
-	
-	public function __construct($dictPath) 
-	{
-		$this->loadDict($dictPath);
-	}
-	
-	private function loadDict($dictPath) 
-	{
-		$this->strList = explode("\n", file_get_contents($dictPath));
-	}
-	
-	public function findFirstIndexOfNeedle($prefix, $offset = null, $s = null, $e = null) 
-	{
-		return $this->findIndexOfNeedle(FIRST, $prefix, $offset, $s, $e);
+	public $dict;
+
+	function __construct() {
+		$this->dict = array();
 	}
 
-	public function findLastIndexOfNeedle($prefix, $offset = null, $s = null, $e = null) 
-	{
-		return $this->findIndexOfNeedle(LAST, $prefix, $offset, $s, $e);
+	function isEmptyWord($w) {
+		return mb_strlen($w, "UTF-8") > 0;
+	}
+
+	function loadDict($dictPath) {
+		$this->dict = explode("\n", file_get_contents($dictPath));
+		$this->dict = array_filter($this->dict, array($this, "isEmptyWord"));
 	}
 	
-	public function findIndexOfNeedle($posType, $prefix, $offset = null, $s = null, $e = null) 
-	{
-		
-		if($offset === null) $offset = 0;
-		if($s === null) $s = 0;
-		if($e === null) $e = count($this->strList);
-		$l = $s;
-		$r = $e - 1;
-		$ans = null;		
-		
-		while($l <= $r) {			
+	function dictSeek($l, $r, $ch, $strOffset, $pos) {
+		$ans = null;
+		while ($l <= $r) {
 			$m = floor(($l + $r) / 2);
-			// echo "$l $r $m\n";
-			$ch = mb_substr($this->strList[$m], $offset, 1, "UTF-8");
-			if($prefix > $ch) {
+			$dict_item = $this->dict[$m];
+			$len = mb_strlen($dict_item, "UTF-8");
+			if ($len <= $strOffset) {
 				$l = $m + 1;
-			} else if($prefix < $ch) {
-				$r = $m - 1;
 			} else {
-				// echo "MATCH\n";
-				$ans = $m;
-				if($posType == FIRST) 
-					$r = $m - 1;
-				else
+				$ch_ = mb_substr($dict_item, $strOffset, 1, "UTF-8");
+				if ($ch_ < $ch) {
 					$l = $m + 1;
+				} else if ($ch_ > $ch) {
+					$r = $m - 1;
+				} else {
+					$ans = $m;
+					if ($pos == "LEFT") {
+						$r = $m - 1;
+					} else {
+						$l = $m + 1;
+					}
+				}
 			}
 		}
-		return $ans === null ? null : intval($ans);
+		return $ans;
 	}
 	
-	public function getDictSize() 
+	function isFinal($acceptor) 
 	{
-		return count($this->strList);
+		$w = $this->dict[$acceptor->l];
+		$len = mb_strlen($w, "UTF-8");
+		return $len == $acceptor->strOffset;
 	}
-	
-	public function getStringLength($i) {
-		return mb_strlen($this->strList[$i], "UTF-8");
+
+	function transit($acceptor, $ch) {
+		$l = $this->dictSeek($acceptor->l, 
+							 $acceptor->r, 
+                             $ch, 
+							 $acceptor->strOffset, 
+							 "LEFT");
+		if (!is_null($l)) {
+			$r = $this->dictSeek($l,
+								 $acceptor->r, 
+								 $ch,
+								 $acceptor->strOffset,
+								 "RIGHT");
+			$acceptor->l = $l;
+			$acceptor->r = $r;
+			$acceptor->strOffset++;
+			$acceptor->isFinal = $this->isFinal($acceptor);
+		} else {
+			$acceptor->isError = true;
+		}
+		return $acceptor;
+	}  
+
+	function createAcceptor() {
+		return new DictAcceptor(&$this);
 	}
+
 }
 
+class DictAcceptor
+{
+	public $l, $r, $strOffset, $isFinal, $isError, $tag, $w, $type, $mw, $unk;
+	function __construct($dict) {
+		$this->dict = $dict;
+		$this->l = 0;
+		$this->r = sizeof($this->dict->dict) - 1;
+		$this->strOffset = 0;
+		$this->isFinal = false;
+		$this->isError = false;
+		$this->tag = "DICT";
+		$this->type = "DICT";
+		$this->w = 1;
+		$this->mw = 0;
+		$this->unk = 0;
+	}
+
+	function transit($ch) {
+		return $this->dict->transit($this, $ch);
+	}
+}
 ?>
