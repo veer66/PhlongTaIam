@@ -74,7 +74,7 @@ class Dict
 	}  
 
 	function createAcceptor() {
-		return new DictAcceptor(&$this);
+		return new DictAcceptor($this);
 	}
 
 }
