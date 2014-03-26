@@ -20,3 +20,7 @@ You can put everything into htdocs (where Web server can access). For example, h
 Word list
 ---------
 Word lists were taken from [LibThai](http://linux.thai.net/projects/libthai)
+
+Demo
+----
+http://vi.8fold.in/s/demo.php
