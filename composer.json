@@ -6,5 +6,6 @@
     "require": {
         "php": ">=5.3.0"
     },
-    "homepage": "http://github.com/veer66/PhlongTaIam"
+    "homepage": "http://github.com/veer66/PhlongTaIam",
+    "minimum-stability": "stable"
 }
