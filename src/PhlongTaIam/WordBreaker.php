@@ -9,7 +9,7 @@ require_once "LatinRules.php";
 
 class WordBreaker
 {
-    function __construct($dictPath) 
+    function __construct($dictPath)
     {
         mb_internal_encoding("UTF-8");
         $this->dict = new Dict();
@@ -23,16 +23,16 @@ class WordBreaker
         $this->pathSelector = new PathSelector();
     }
 
-    function createPath() 
+    function createPath()
     {
-        return array(array("p" => NULL,
+        return array(array("p" => null,
                            "w" => 0,
                            "unk" => 0,
                            "type" => "INIT",
                            "mw" => 0));
     }
 
-    function buildPath($text) 
+    function buildPath($text)
     {
         $leftBoundary = 0;
         $path = $this->createPath();
@@ -41,32 +41,34 @@ class WordBreaker
         for ($i = 0; $i < $len; $i++) {
             $ch = mb_substr($text, $i, 1, "UTF-8");
             $this->acceptors->transit($ch);
-            $possiblePathInfos = 
+            $possiblePathInfos =
                 $this->pathInfoBuilder->build(
-                    $path, 
-                    $this->acceptors->getFinalAcceptors(), 
-                    $i, 
-                    $leftBoundary, 
-                    $text);
+                    $path,
+                    $this->acceptors->getFinalAcceptors(),
+                    $i,
+                    $leftBoundary,
+                    $text
+                );
             $selectedPath = $this->pathSelector->selectPath($possiblePathInfos);
             $path[] = $selectedPath;
-            if ($selectedPath["type"] != "UNK")
+            if ($selectedPath["type"] != "UNK") {
                 $leftBoundary = $i;
+            }
         }
         return $path;
     }
 
-    function rangesToTextList($text, $ranges) 
+    function rangesToTextList($text, $ranges)
     {
         $textList = array();
-        foreach($ranges as $r) {
+        foreach ($ranges as $r) {
             $w = mb_substr($text, $r["s"], $r["e"] - $r["s"], "UTF-8");
             $textList[] = $w;
-        }   
+        }
         return $textList;
     }
 
-    function pathToRanges($path) 
+    function pathToRanges($path)
     {
         $e = sizeof($path) - 1;
         $ranges = array();
@@ -88,18 +90,17 @@ class WordBreaker
         return array_reverse($ranges);
     }
 
-    function breakIntoRanges($text) 
+    function breakIntoRanges($text)
     {
         $path = $this->buildPath($text);
         $ranges = $this->pathToRanges($path);
         return $ranges;
     }
 
-    function breakIntoWords($text) 
+    function breakIntoWords($text)
     {
         $ranges = $this->breakIntoRanges($text);
         $textList = $this->rangesToTextList($text, $ranges);
         return $textList;
     }
 }
-?>
