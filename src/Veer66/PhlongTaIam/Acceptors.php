@@ -1,5 +1,6 @@
 <?php
-namespace PhlongTaIam;
+namespace Veer66\PhlongTaIam;
+
 class Acceptors
 {
 	public $creators;

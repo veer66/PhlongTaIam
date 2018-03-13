@@ -1,5 +1,5 @@
 <?php
-namespace PhlongTaIam;
+namespace Veer66\PhlongTaIam;
 
 require_once "Dict.php";
 require_once "PathInfoBuilder.php";

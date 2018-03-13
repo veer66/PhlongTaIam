@@ -1,6 +1,7 @@
 <?php
-namespace PhlongTaIam;
-class Dict 
+namespace Veer66\PhlongTaIam;
+
+class Dict
 {
 	public $dict;
 

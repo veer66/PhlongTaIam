@@ -1,5 +1,5 @@
 <?php
-namespace PhlongTaIam;
+namespace Veer66\PhlongTaIam;
 
 class PathSelector {
     function selectPath($paths) {
