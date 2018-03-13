@@ -1,11 +1,13 @@
 <?php
 namespace Veer66\PhlongTaIam;
 
+/*
 require_once "Dict.php";
 require_once "PathInfoBuilder.php";
 require_once "Acceptors.php";
 require_once "PathSelector.php";
 require_once "LatinRules.php";
+*/
 
 class WordBreaker
 {
