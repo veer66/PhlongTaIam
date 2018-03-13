@@ -1,7 +1,7 @@
 <?php
-namespace Veer66\PhlongTaIam;
+namespace Veer66\PhlongTaIam\Acceptor;
 
-class SingleSymbolAcceptor
+class SpaceRuleAcceptor
 {
     public $strOffset, $isFinal, $isError, $tag, $w, $type, $mw, $unk;
 
@@ -10,8 +10,8 @@ class SingleSymbolAcceptor
         $this->strOffset = 0;
         $this->isFinal = false;
         $this->isError = false;
-        $this->tag = "SINSYM";
-        $this->type = "SINSYM";
+        $this->tag = "SPACE_RULE";
+        $this->type = "SPACE_RULE";
         $this->w = 1;
         $this->mw = 0;
         $this->unk = 0;
@@ -19,7 +19,7 @@ class SingleSymbolAcceptor
 
     function transit($ch)
     {
-        if ($this->strOffset == 0 && mb_strpos("()/-", $ch, 0, "UTF-8") >= 0) {
+        if ($ch == " " || $ch == "\t" || $ch == "\r" || $ch == "\n") {
             $this->isFinal = true;
             $this->strOffset++;
         } else {

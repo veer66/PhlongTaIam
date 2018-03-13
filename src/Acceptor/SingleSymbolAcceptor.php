@@ -1,7 +1,7 @@
 <?php
-namespace Veer66\PhlongTaIam;
+namespace Veer66\PhlongTaIam\Acceptor;
 
-class WordRuleAcceptor
+class SingleSymbolAcceptor
 {
     public $strOffset, $isFinal, $isError, $tag, $w, $type, $mw, $unk;
 
@@ -10,8 +10,8 @@ class WordRuleAcceptor
         $this->strOffset = 0;
         $this->isFinal = false;
         $this->isError = false;
-        $this->tag = "WORD_RULE";
-        $this->type = "WORD_RULE";
+        $this->tag = "SINSYM";
+        $this->type = "SINSYM";
         $this->w = 1;
         $this->mw = 0;
         $this->unk = 0;
@@ -19,7 +19,7 @@ class WordRuleAcceptor
 
     function transit($ch)
     {
-        if (($ch >= "a" && $ch <= "z") || ($ch >= "A" && $ch <= "z")) {
+        if ($this->strOffset == 0 && mb_strpos("()/-", $ch, 0, "UTF-8") >= 0) {
             $this->isFinal = true;
             $this->strOffset++;
         } else {

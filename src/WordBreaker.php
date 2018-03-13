@@ -4,10 +4,15 @@ namespace Veer66\PhlongTaIam;
 /*
 require_once "Dict.php";
 require_once "PathInfoBuilder.php";
-require_once "Acceptors.php";
+require_once "Acceptor.php";
 require_once "PathSelector.php";
 require_once "LatinRules.php";
 */
+
+use Veer66\PhlongTaIam\Acceptor\Acceptors;
+use Veer66\PhlongTaIam\Rules\WordRule;
+use Veer66\PhlongTaIam\Rules\SpaceRule;
+use Veer66\PhlongTaIam\Rules\SingleSymbolRule;
 
 class WordBreaker
 {

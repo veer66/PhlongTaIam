@@ -1,5 +1,5 @@
 <?php
-namespace Veer66\PhlongTaIam;
+namespace Veer66\PhlongTaIam\Acceptor;
 
 class DictAcceptor
 {

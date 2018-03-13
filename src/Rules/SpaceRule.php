@@ -1,5 +1,6 @@
 <?php
-namespace Veer66\PhlongTaIam;
+namespace Veer66\PhlongTaIam\Rules;
+use Veer66\PhlongTaIam\Acceptor\SpaceRuleAcceptor;
 
 class SpaceRule
 {

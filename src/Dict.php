@@ -1,6 +1,8 @@
 <?php
 namespace Veer66\PhlongTaIam;
 
+use Veer66\PhlongTaIam\Acceptor\DictAcceptor;
+
 class Dict
 {
     public $dict;

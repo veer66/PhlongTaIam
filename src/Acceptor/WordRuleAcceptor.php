@@ -1,7 +1,7 @@
 <?php
-namespace Veer66\PhlongTaIam;
+namespace Veer66\PhlongTaIam\Acceptor;
 
-class SpaceRuleAcceptor
+class WordRuleAcceptor
 {
     public $strOffset, $isFinal, $isError, $tag, $w, $type, $mw, $unk;
 
@@ -10,8 +10,8 @@ class SpaceRuleAcceptor
         $this->strOffset = 0;
         $this->isFinal = false;
         $this->isError = false;
-        $this->tag = "SPACE_RULE";
-        $this->type = "SPACE_RULE";
+        $this->tag = "WORD_RULE";
+        $this->type = "WORD_RULE";
         $this->w = 1;
         $this->mw = 0;
         $this->unk = 0;
@@ -19,7 +19,7 @@ class SpaceRuleAcceptor
 
     function transit($ch)
     {
-        if ($ch == " " || $ch == "\t" || $ch == "\r" || $ch == "\n") {
+        if (($ch >= "a" && $ch <= "z") || ($ch >= "A" && $ch <= "z")) {
             $this->isFinal = true;
             $this->strOffset++;
         } else {
