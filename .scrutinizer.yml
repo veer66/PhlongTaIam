@@ -1,0 +1,30 @@
+inherit: true
+
+checks:
+    php:
+        code_rating: true
+        duplication: true
+
+tools:
+    external_code_coverage:
+      timeout: 600
+    php_code_sniffer:
+      config:
+        standard: PSR2
+    php_cs_fixer:
+      extensions:
+        # Default:
+        - php
+      fixers: []
+      enabled: false
+      filter:
+            paths: [tests/*,src/*]
+            excluded_paths: []
+coding_style:
+  php:
+    indentation:
+      general:
+        use_tabs: false
+
+filter:
+    paths: [tests/*,src/*]
