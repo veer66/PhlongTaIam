@@ -52,17 +52,9 @@ class Dict
 	}
 
 	function transit($acceptor, $ch) {
-		$l = $this->dictSeek($acceptor->l, 
-							 $acceptor->r, 
-                             $ch, 
-							 $acceptor->strOffset, 
-							 "LEFT");
+		$l = $this->dictSeek($acceptor->l, $acceptor->r, $ch, $acceptor->strOffset, "LEFT");
 		if (!is_null($l)) {
-			$r = $this->dictSeek($l,
-								 $acceptor->r, 
-								 $ch,
-								 $acceptor->strOffset,
-								 "RIGHT");
+			$r = $this->dictSeek($l, $acceptor->r, $ch, $acceptor->strOffset, "RIGHT");
 			$acceptor->l = $l;
 			$acceptor->r = $r;
 			$acceptor->strOffset++;
