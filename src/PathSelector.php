@@ -1,21 +1,24 @@
 <?php
-namespace PhlongTaIam;
+namespace Veer66\PhlongTaIam;
 
-class PathSelector {
-    function selectPath($paths) {
+class PathSelector
+{
+    function selectPath($paths)
+    {
         $selectedPath = null;
-        foreach($paths as $path) {
-            if (is_null($selectedPath)) {        
+        foreach ($paths as $path) {
+            if (is_null($selectedPath)) {
                 $selectedPath = $path;
             } else {
                 if ($path["unk"] < $selectedPath["unk"]) {
                     $selectedPath = $path;
-                } else if ($path["unk"] == $selectedPath["unk"]) {
+                } elseif ($path["unk"] == $selectedPath["unk"]) {
                     if ($path["mw"] < $selectedPath["mw"]) {
                         $selectedPath = $path;
-                    } else if ($path["mw"] == $selectedPath["mw"]) {
-                        if ($path["w"] < $selectedPath["w"]) 
+                    } elseif ($path["mw"] == $selectedPath["mw"]) {
+                        if ($path["w"] < $selectedPath["w"]) {
                             $selectedPath = $path;
+                        }
                     }
                 }
             }
@@ -23,4 +26,3 @@ class PathSelector {
         return $selectedPath;
     }
 }
-?>
